@@ -123,8 +123,10 @@ def working_hours(func):
             print("Я не пишу тесты на python, время отдыха!")
     return wrapper
 
-@ working_hours # 
+@ working_hours #
 def writing_tests():
     print("Я пишу тесты на python!")
+
+# 4 
 
 
