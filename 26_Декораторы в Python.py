@@ -2,6 +2,8 @@ import datetime
 import functools
 from decorators import do_twice
 from decorators import debug
+import pytest
+import requests
 
 
 # 26.1. Функции и как они работают. Возвращаемые типы и типы передаваемых параметров:
@@ -180,13 +182,13 @@ from decorators import debug
 # Возврат значения из функции-декоратора.
 # Для возврата значения из функции-декоратора нужно из функции-обёртки в декораторе возвращать значение
 # (return func(*args, **kwargs) (см. файл decorators.py):
-@do_twice
-def test_twice(str):
-    print(f'Этот вызов возвращает строку {str}')
-    return 'Done'
-
-decorated_value = test_twice('single')
-print(decorated_value)
+# @do_twice
+# def test_twice(str):
+#     print(f'Этот вызов возвращает строку {str}')
+#     return 'Done'
+#
+# decorated_value = test_twice('single')
+# print(decorated_value)
 
 # 4
 # Интроспекция, пример реального использования декораторов.
@@ -210,3 +212,31 @@ print(decorated_value)
 #
 # age_passed("Роман")
 # age_passed("Роман", age=21)
+
+                                        # 26.4.1 Фикстуры.
+
+# 1
+
+# @pytest.fixture()
+# def random_data():
+#     return 42
+#
+# def test_random_data(random_data):
+#     assert random_data == 42
+
+# 2  Фикстуры setup и teardown.
+
+def get_key():
+    # переменные email и password нужно заменить своими учетными данными
+    response = requests.post(url='https://petfriends.skillfactory.ru/login',
+                             data={"email": email, "pass": password})
+    assert response.status_code == 200, 'Запрос выполнен неуспешно'
+    assert 'Cookie' in response.request.headers, 'В запросе не передан ключ авторизации'
+    return response.request.headers.get('Cookie')
+
+def test_getAllPets(get_key):
+    response = requests.get(url='https://petfriends.skillfactory.ru/api/pets',
+                            headers={"Cookie": get_key})
+    assert response.status_code == 200, 'Запрос выполнен неуспешно'
+    assert len(response.json().get('pets')) > 0, 'Количество питомцев не соответствует ожиданиям'
+
