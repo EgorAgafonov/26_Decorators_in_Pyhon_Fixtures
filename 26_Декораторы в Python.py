@@ -1,5 +1,7 @@
 import datetime
+import functools
 from decorators import do_twice
+from decorators import debug
 
 
 # 26.1. Функции и как они работают. Возвращаемые типы и типы передаваемых параметров:
@@ -178,10 +180,33 @@ from decorators import do_twice
 # Возврат значения из функции-декоратора.
 # Для возврата значения из функции-декоратора нужно из функции-обёртки в декораторе возвращать значение
 # (return func(*args, **kwargs) (см. файл decorators.py):
+# @do_twice
+# def test_twice(str):
+#     print(f'Этот вызов возвращает строку {str}')
+#     return 'Done'
+#
+# decorated_value = test_twice('single')
+# print(decorated_value)
+
+# 4
+# Интроспекция, пример реального использования декораторов.
+
 @do_twice
 def test_twice(str):
     print(f'Этот вызов возвращает строку {str}')
     return 'Done'
 
-decorated_value = test_twice('single')
-print(decorated_value)
+print(test_twice.__name__)
+
+# 5
+# Функция-дебаггер (декортаор см. в файле decorators.py):
+
+# @debug
+# def age_passed(name, age=None):
+#   if age is None:
+#     return "Необходимо передать значение age"
+#   else:
+#     return "Аргументы по умолчанию заданы!"
+#
+# age_passed("Роман")
+# age_passed("Роман", age=21)
