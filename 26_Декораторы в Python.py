@@ -140,27 +140,48 @@ from decorators import do_twice
 #
 # test_twice()
 
-# 5
+                                        # 26.3 Декорирование функций аргументами.
 
-def pipes_replacement(func):
-    def wrapper():
-        if 9 < datetime.datetime.now().hour < 19:
-            func()
-        else:
-            print('Профилактические работы не ведутся.')
-    return wrapper
-
-
-@pipes_replacement
-def prevention_warning():
-    print('Ведутся профилактические работы.')
-
-
-prevention_warning()
-
-# def prevention_warning():
-#     print('Ведутся профилактические работы.')
+# 1
+# В функцию-декортаор do_twice передали один аргумент str, но это ограничит ее использование, так как перадавать более
+# одного аргумента и/или ни одного аргумента (0) в нее больше нельзя.
+# @do_twice
+# def test_twice(str):
+#     print("Этот вызов возвращает строку {0}".format(str))
 #
-# prevention_warning = pipes_replacement(prevention_warning)
+# test_twice()
+
+# 2
+# Следовательно, Чтобы сделать нашу функцию-декоратор универсальной, существует достаточно простое решение:
+# нужно использовать *args и **kwargs внутри функции-обёртки. В этом случае наша функция будет принимать любое
+# количество аргументов (включая 0) (см. файл decorators.py):
+
+# @do_twice
+# def test_twice_without_params():
+#     print("Этот вызов без параметров")
 #
-# prevention_warning()
+# @do_twice
+# def test_twice_2_params(str1, str2, str3):
+#     print(f'В этой функции 3 параметра - {str1}, {str2}, {str3}.')
+#
+# @do_twice
+# def test_twice(str):
+#     print(f'Этот вызов возвращает строку {str}')
+#
+# test_twice_without_params()
+#
+# test_twice_2_params(1, 2, 3)
+#
+# test_twice('single')
+
+# 3
+# Возврат значения из функции-декоратора.
+# Для возврата значения из функции-декоратора нужно из функции-обёртки в декораторе возвращать значение
+# (return func(*args, **kwargs) (см. файл decorators.py):
+@do_twice
+def test_twice(str):
+    print(f'Этот вызов возвращает строку {str}')
+    return 'Done'
+
+decorated_value = test_twice('single')
+print(decorated_value)
