@@ -1,2 +1,2 @@
 email = 'fonovagafonov@yandex.ru'
-password = 123456
+password = '123456'

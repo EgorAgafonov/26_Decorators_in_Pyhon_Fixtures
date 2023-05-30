@@ -4,6 +4,8 @@ from decorators import do_twice
 from decorators import debug
 import pytest
 import requests
+from data_file import email, password
+import datetime
 
 
 # 26.1. Функции и как они работают. Возвращаемые типы и типы передаваемых параметров:
@@ -226,6 +228,7 @@ import requests
 
 # 2  Фикстуры setup и teardown.
 
+@ pytest.fixture()
 def get_key():
     # переменные email и password нужно заменить своими учетными данными
     response = requests.post(url='https://petfriends.skillfactory.ru/login',
@@ -240,3 +243,10 @@ def test_getAllPets(get_key):
     assert response.status_code == 200, 'Запрос выполнен неуспешно'
     assert len(response.json().get('pets')) > 0, 'Количество питомцев не соответствует ожиданиям'
 
+@pytest.fixture(autouse=True)
+
+def time_delta():
+    start_time = datetime.datetime.now()
+    yield
+    end_time = datetime.datetime.now()
+    print(f"\nТест шел: {end_time - start_time}")
