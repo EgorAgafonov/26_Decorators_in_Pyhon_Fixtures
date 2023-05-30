@@ -180,23 +180,23 @@ from decorators import debug
 # Возврат значения из функции-декоратора.
 # Для возврата значения из функции-декоратора нужно из функции-обёртки в декораторе возвращать значение
 # (return func(*args, **kwargs) (см. файл decorators.py):
-# @do_twice
-# def test_twice(str):
-#     print(f'Этот вызов возвращает строку {str}')
-#     return 'Done'
-#
-# decorated_value = test_twice('single')
-# print(decorated_value)
-
-# 4
-# Интроспекция, пример реального использования декораторов.
-
 @do_twice
 def test_twice(str):
     print(f'Этот вызов возвращает строку {str}')
     return 'Done'
 
-print(test_twice.__name__)
+decorated_value = test_twice('single')
+print(decorated_value)
+
+# 4
+# Интроспекция, пример реального использования декораторов.
+
+# @do_twice
+# def test_twice(str):
+#     print(f'Этот вызов возвращает строку {str}')
+#     return 'Done'
+#
+# print(test_twice.__name__)
 
 # 5
 # Функция-дебаггер (декортаор см. в файле decorators.py):
